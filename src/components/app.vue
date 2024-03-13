@@ -66,7 +66,7 @@ export default {
         }
 
         // Call F7 APIs here
-        
+
       });
     });
 
@@ -78,7 +78,6 @@ export default {
 
       let watchID = navigator.geolocation.watchPosition((position) => {
         let userLocation = [position.coords.latitude, position.coords.longitude];
-        console.log('Updated Location : ', userLocation[0], userLocation[1]);
       }, (error) => {
         console.error('Error occurred: ' + error.message);
       }, {

@@ -4,12 +4,10 @@
         <div id="containerHome">
             <f7-block id="textBanner">
                 <p>Dapatkan keunggulan dalam pengelolaan usaha Anda dengan solusi Point of Sales modern kami yang tidak
-                    hanya
-                    menyederhanakan transaksi, tetapi juga memberikan wawasan mendalam tentang inventaris, penjualan,
-                    dan
-                    perilaku pelanggan. Tingkatkan efisiensi, pantau kinerja toko, dan ciptakan pengalaman belanja yang
-                    lebih
-                    baik bagi pelanggan Anda dengan teknologi POS yang andal dan inovatif!</p>
+                    hanya menyederhanakan transaksi, tetapi juga memberikan wawasan mendalam tentang inventaris,
+                    penjualan, dan perilaku pelanggan. Tingkatkan efisiensi, pantau kinerja toko, dan ciptakan
+                    pengalaman belanja yang lebih baik bagi pelanggan Anda dengan teknologi POS yang andal dan inovatif!
+                </p>
                 <img src="../assets/womanwarung.png" width="300x" class="lazy" />
             </f7-block>
             <f7-block>
@@ -49,21 +47,7 @@
 </style>
 
 <script>
-import { styles, text } from 'dom7';
-import {
-    f7Navbar,
-    f7Page,
-    f7LoginScreen,
-    f7List,
-    f7ListItem,
-    f7Block,
-    f7Button,
-    f7LoginScreenTitle,
-    f7BlockFooter,
-    f7ListButton,
-    f7ListInput,
-    f7,
-} from 'framework7-vue';
+import { f7, f7Navbar, f7Page, f7LoginScreen, f7List, f7ListButton, f7ListInput } from 'framework7-vue';
 
 export default {
     components: {
@@ -71,20 +55,8 @@ export default {
         f7Page,
         f7LoginScreen,
         f7List,
-        f7ListItem,
-        f7Block,
-        f7Button,
-        f7LoginScreenTitle,
-        f7BlockFooter,
         f7ListButton,
         f7ListInput,
-    },
-    props: {
-        f7route: Object,
-        f7router: Object,
-    },
-    mounted() {
-        console.log(this.f7route.url)
     },
     data() {
         return {
@@ -95,32 +67,38 @@ export default {
     },
     methods: {
         async signIn() {
-            const self = this;
+            try {
+                const response = await fetch('https://karot.dev.catalis.app/api/v1/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: this.email,
+                        password: this.password,
+                    }),
+                });
 
-            const response = await fetch('http://43.243.187.6:6060/api/v1/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: self.email,
-                    password: self.password,
-                }),
-            });
+                const data = await response.json();
 
-            const data = await response.json();
+                console.log(data.data.token);
 
-            console.log(data.data.token);
+                localStorage.setItem('token', data.data.token);
 
-            localStorage.setItem('token', data.data.token);
+                this.loginScreenOpened = false;
 
-            self.loginScreenOpened = false;
-
-            this.f7router.navigate('/cariToko/');
+                f7.views.main.router.navigate('/cariToko/');
+            } catch (error) {
+                console.error('Error signing in:', error);
+            }
         },
         backToHome() {
             this.loginScreenOpened = false;
         },
+    },
+    mounted() {
+        // Menambahkan f7router sebagai properti pada objek global f7
+        f7.f7router = this.$f7router;
     },
 };
 </script>

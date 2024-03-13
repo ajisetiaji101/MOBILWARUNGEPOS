@@ -96,7 +96,7 @@ export default {
         findAll() {
             const token = localStorage.getItem('token');
 
-            fetch('http://43.243.187.6:6060/api/v1/product/getProductByCoordinate?page=1&size=10&sort=createdAt%2C%20desc', {
+            fetch('https://karot.dev.catalis.app/api/v1/product/getProductByCoordinate?page=1&size=10&sort=createdAt%2C%20desc', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
